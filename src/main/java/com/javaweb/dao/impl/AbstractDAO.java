@@ -27,7 +27,7 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 	}
 
 	@Override
-	public List<T> query(String sql, RowMapper<T> rowMapper, Object... parameter) {
+	public List<T> query(String sql, RowMapper<T> rowMapper, Object... parameters) {
 		List<T> result = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -37,6 +37,8 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 			conn = getConnection();
 			ps = conn.prepareStatement(sql);
 			// set params
+			setParameter(ps, parameters);
+			
 			rs = ps.executeQuery();
 			while(rs.next()) {
 				result.add(rowMapper.mapRow(rs));
@@ -59,8 +61,17 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 		}
 	}
 
-	
-
-	
-	
+	private void setParameter(PreparedStatement ps, Object... parameters) {
+		try {
+			for(int i = 0; i < parameters.length; i++) {
+				Object parameter = parameters[i];
+				int index = i + 1;
+				if(parameter instanceof Long) {
+						ps.setLong(index,(Long) parameter);
+					}
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
