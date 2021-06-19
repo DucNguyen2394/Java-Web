@@ -101,50 +101,9 @@
 		</div>
 		<!-- /.main-content -->
 		<script>
-			var totalPages = ${model.totalPage};
-			var currentPage = ${model.page};
-			var limit = 2;
-			$(function () {
-				window.pagObj = $('#pagination').twbsPagination({
-					totalPages: totalPages,
-					visiblePages: 10,
-					startPage: currentPage,
-					onPageClick: function (event, page) {
-						if (currentPage != page) {
-							$('#maxPageItem').val(limit);
-							$('#page').val(page);
-							$('#sortName').val('title');
-							$('#sortBy').val('desc');
-							$('#type').val('list');
-							$('#formSubmit').submit();
-						}
-					}
-				});
-			});
 			
-			$("#btnDelete").click(function() {
-				var data = {};
-				var ids = $('tbody input[type=checkbox]:checked').map(function () {
-		            return $(this).val();
-		        }).get();
-				data['ids'] = ids;
-				deleteNew(data);
-			});
 			
-			function deleteNew(data) {
-		        $.ajax({
-		            url: '${APIurl}',
-		            type: 'DELETE',
-		            contentType: 'application/json',
-		            data: JSON.stringify(data),
-		            success: function (result) {
-		                window.location.href = "${NewURL}?type=list&maxPageItem=2&page=1&message=delete_success";
-		            },
-		            error: function (error) {
-		            	window.location.href = "${NewURL}?type=list&maxPageItem=2&page=1&message=error_system";
-		            }
-		        });
-		    }
+			
 		</script>
 	</body>
 

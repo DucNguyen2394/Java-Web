@@ -1,6 +1,6 @@
 package com.javaweb.model;
 
-public class UserModel {
+public class UserModel extends AbstractModel<UserModel> {
 	private String name;
 
 	public UserModel() {

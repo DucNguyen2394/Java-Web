@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,9 +70,93 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 				if(parameter instanceof Long) {
 						ps.setLong(index,(Long) parameter);
 					}
+				else if(parameter instanceof Integer) {
+					ps.setInt(index, (Integer) parameter);
 				}
+				else if(parameter instanceof String) {
+					ps.setString(index, (String) parameter);
+				}
+				else if(parameter instanceof Timestamp) {
+					ps.setTimestamp(index, (Timestamp) parameter);
+				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void update(String sql, Object... parameter) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = getConnection();
+			conn.setAutoCommit(false);
+			ps = conn.prepareStatement(sql);
+			setParameter(ps, parameter);
+			ps.executeUpdate();
+			conn.commit();
+		}catch(SQLException e) {
+			if(conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}finally {
+			try {
+				if(ps != null) {
+					ps.close();
+				}if(conn != null) {
+					conn.close();
+				}
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public Long insert(String sql, Object... parameter) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Long id = null;
+		try {
+			conn = getConnection();
+			conn.setAutoCommit(false);
+			ps = conn.prepareStatement(sql, ps.RETURN_GENERATED_KEYS);
+			setParameter(ps, parameter);
+			ps.executeUpdate();
+			rs = ps.getGeneratedKeys();
+			if(rs.next()) {
+				id = rs.getLong(1);
+			}
+			conn.commit();
+			return id;
+		}catch(SQLException e) {
+			if(conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(ps != null) {
+					ps.close();
+				}if(conn != null) {
+					conn.close();
+				}
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }

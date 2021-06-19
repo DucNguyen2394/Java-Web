@@ -12,4 +12,17 @@ public class NewDAO extends AbstractDAO<NewModel> implements INewDAO {
 		String sql = "SELECT * FROM news WHERE categoryId = ?";
 		return query(sql, new NewMapper(),categoryId);
 	}
+
+	@Override
+	public Long save(NewModel newModel) {
+		String sql = "INSERT INTO news (title, content, categoryId) VALUES (?,?,?)";
+		return insert(sql, newModel.getTitle(), newModel.getContent(), newModel.getCategoryId());
+	}
+
+	@Override
+	public List<NewModel> findAll() {
+		String sql = "SELECT * FROM news";
+		return query(sql, new NewMapper());
+	}
+	
 }
