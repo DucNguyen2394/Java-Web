@@ -159,4 +159,36 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 		}
 		return null;
 	}
+
+	@Override
+	public int count(String sql, Object... parameter) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		int count = 0;
+		try {
+			conn = getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				count = rs.getInt(1);
+			}
+			return count;
+		}catch(SQLException e) {
+			return 0;
+		}finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(ps != null) {
+					ps.close();
+				}if(conn != null) {
+					conn.close();
+				}
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

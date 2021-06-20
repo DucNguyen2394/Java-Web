@@ -8,7 +8,9 @@ public interface INewService {
 	
 	NewModel save(NewModel newModel);
 	
-	List<NewModel> findAll();
+	List<NewModel> findAll(Integer offset, Integer limit);
 	
 	void delete(Long[] id);
+	
+	int getTotalItem();
 }

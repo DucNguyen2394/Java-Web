@@ -24,10 +24,10 @@ public class NewAPI extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		NewModel newModel =  HttpUtil.of(req.getReader()).toModel(NewModel.class);
-		newModel = newService.save(newModel);
-		
-		mapper.writeValue(resp.getOutputStream(), newModel);
+//		NewModel newModel =  HttpUtil.of(req.getReader()).toModel(NewModel.class);
+//		newModel = newService.save(newModel);
+//		
+//		mapper.writeValue(resp.getOutputStream(), newModel);
 	}
 	
 }

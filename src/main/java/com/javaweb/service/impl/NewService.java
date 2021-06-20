@@ -24,13 +24,18 @@ public class NewService implements INewService {
 	}
 
 	@Override
-	public List<NewModel> findAll() {
-		return newDao.findAll();
+	public List<NewModel> findAll(Integer offset, Integer limit) {
+		return newDao.findAll(offset, limit);
 	}
 
 	@Override
 	public void delete(Long[] id) {
 		
+	}
+
+	@Override
+	public int getTotalItem() {
+		return newDao.getTotalItem();
 	}
 
 }
