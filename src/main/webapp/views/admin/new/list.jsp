@@ -87,7 +87,9 @@
 											<ul class="pagination" id="pagination"></ul>
 											<input type="hidden" value="" id="page" name="page"/>
 											<input type="hidden" value="" id="maxPageItem" name="maxPageItem"/>
-											
+											<input type="hidden" value="" id="sortName" name="sortName"/>
+											<input type="hidden" value="" id="sortBy" name="sortBy"/>
+											<input type="hidden" value="" id="type" name="type"/>
 										</div>
 									</div>
 								</div>
@@ -99,21 +101,22 @@
 		</div>
 		<!-- /.main-content -->
 		<script>
+			var totalPages = ${model.totalPage};
 			var currentPage = ${model.page};
-			var totalPage = ${model.totalPage};
 			var limit = 2;
 			$(function () {
 				window.pagObj = $('#pagination').twbsPagination({
-					totalPages: totalPage,
+					totalPages: totalPages,
 					visiblePages: 10,
 					startPage: currentPage,
 					onPageClick: function (event, page) {
 						if (currentPage != page) {
-							if(currentPage != page){								
 							$('#maxPageItem').val(limit);
 							$('#page').val(page);
+							$('#sortName').val('title');
+							$('#sortBy').val('desc');
+							$('#type').val('list');
 							$('#formSubmit').submit();
-							}
 						}
 					}
 				});

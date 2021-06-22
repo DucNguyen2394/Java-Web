@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.javaweb.constant.SystemConstant;
 import com.javaweb.model.NewModel;
 import com.javaweb.service.INewService;
+import com.javaweb.utils.FormUtil;
 
 @WebServlet(urlPatterns = {"/admin-new"})
 public class NewController extends HttpServlet{
@@ -22,22 +23,12 @@ private static final long serialVersionUID = -5976268535978928077L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		NewModel newModel = new NewModel();
-		String pageStr = req.getParameter("page");
-		String maxPagestr = req.getParameter("maxPageItem");
-		if(pageStr != null) {
-			newModel.setPage(Integer.parseInt(pageStr));
-		}else {
-			newModel.setPage(1);
-		}
-		if(maxPagestr != null) {
-			newModel.setMaxPageItem(Integer.parseInt(maxPagestr));
-		}
+		NewModel newModel = FormUtil.toModel(NewModel.class, req);
 		
 		Integer offset = (newModel.getPage() - 1) * newModel.getMaxPageItem();
 		
 		newModel.setListResult(newService.findAll(offset,newModel.getMaxPageItem()));
-		
+				
 		req.setAttribute(SystemConstant.MODEL, newModel);
 		
 		newModel.setTotalItem(newService.getTotalItem());
